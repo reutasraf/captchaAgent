@@ -1,0 +1,359 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    function SendSurvey() {
+        var i;
+        var answers = [];
+        var additionalAnswers = [];
+
+        var currName = "";
+        var currVal1 = "";
+        var currVal2 = "";
+        var ansVal = "";
+
+        // survey questions
+        for (i = 1; i <= 8; i++) {
+            currName = "";
+            currVal1 = "";
+            currVal2 = "";
+            ansVal = "";
+
+            currName = "#a" + i.toString();
+            currVal1 = $(currName).val();
+            currVal2 = $("input[name=" + currName + "]:checked").val();
+            if (!(!currVal1 || currVal1 == "")) {
+                ansVal = currVal1;
+            }
+            else if (!(!currVal2 || currVal2 == "")) {
+                ansVal = currVal2;
+            }
+            else {
+                alert("Please answer all the questions.");
+                return;
+            }
+            answers.push(ansVal);
+        }
+
+        // additional questions
+        for (i = 1; i <= 2; i++) {
+            currName = "";
+            currVal1 = "";
+            currVal2 = "";
+            ansVal = "";
+
+            currName = "#a0" + i.toString();
+            currVal1 = $(currName).val();
+            currVal2 = $("input[name=" + currName + "]:checked").val();
+            if (!(!currVal1 || currVal1 == "")) {
+                ansVal = currVal1;
+            }
+            else if (!(!currVal2 || currVal2 == "")) {
+                ansVal = currVal2;
+            }
+            else {
+                alert("Please answer all the questions.");
+                return;
+            }
+            additionalAnswers.push(ansVal);
+        }
+
+        //var answersVal = answers.join();
+        //var answersVal = JSON.stringify(answers);
+
+        $.ajax({
+            method: "POST",
+            //url: "/Experiments/SendPersonalInfo",
+            url: "/HelperPacer/Experiments/SendPersonalInfo",
+
+            data: {
+                answers: answers,
+                additionalAnswers: additionalAnswers,
+            },
+
+            beforeSend: function () {
+                //$('#loadingmessage').show();
+                $('#cont_str_info_id').prop("disabled", true);
+            },
+
+            success: function (html) {
+                $(".content").html(html);
+                //$('#loadingmessage').hide(); // hide the loading message
+                //window.location.replace("/HelperPacer/Experiments/SurveyCont");
+                //window.location.replace("/Experiments/SurveyCont");
+                window.location.replace("/HelperPacer/Experiments/ThankYou");
+            },
+            error: function (jqXHR, exception) {
+                //alert(jqXHR.statusText);
+                alert("Something went wrong. Please contact the HIT requester.");
+                window.location.replace("/HelperPacer/Experiments/ThankYou");
+            }
+        });
+    }
+</script>
+<html>
+<body>
+    <h4 style="text-align: center;">
+        <color style="color: #000080;">
+            <img src="~/Resources/green.png" height="42" width="42"><strong>Thank you and the virtual player for solving 24 captchas!</strong><br><br>
+            We would appreciate your help answering the following questions about this HIT. <br><br>
+            Your sincere and detailed answers are valuable to us, so please answer honestly.<br><br>
+        </color>
+    </h4>
+
+    <h2 style="text-align: center;"><span style="color: #ff6600;"><strong>Feedback Questions</strong></span></h2>
+
+    <!-- competence -->
+    <div class="wrap">
+        <form action="">
+            <label class="statement">@Session["q1"]</label>
+            <ul class='likert'>
+                <img src="~/Resources/red.png" style="margin:auto; width:50px;" />
+                @{
+                    var label1 = "";
+                    var tag1 = "label";
+
+                    for (var i = 1; i <= 10; i++)
+                    {
+                        label1 = "";
+                        tag1 = "label";
+                        if (i == 1)
+                        {
+                            label1 = "Not at all";
+                            tag1 += "_red";
+                        }
+                        else if (i == 10)
+                        {
+                            label1 = "Very much";
+                            tag1 += "_green";
+                        }
+                        <li>
+                            @Html.RadioButton("#a1", @i)
+                            <label>@i</label>
+                            <@tag1>@label1<@("/"+tag1)>
+                        </li>
+                    }
+                }
+
+                <img src="~/Resources/green.png" style="margin:auto; width:50px;" />
+            </ul>
+        </form>
+    </div>
+
+    <!-- competence explanation -->
+    <form action="">
+        <label class="statement">
+            @Session["q2"]
+        </label>
+        <textarea id="a2" rows="3" cols="70"></textarea>
+    </form>
+    <br><br>
+
+    <!-- trust -->
+    <div class="wrap">
+        <form action="">
+            <label class="statement">@Session["q3"]</label>
+            <ul class='likert'>
+                <img src="~/Resources/red.png" style="margin:auto; width:50px;" />
+                @{
+                    var label3 = "";
+                    var tag3 = "label";
+
+                    for (var i = 1; i <= 10; i++)
+                    {
+                        label3 = "";
+                        tag3 = "label";
+                        if (i == 1)
+                        {
+                            label3 = "Not at all";
+                            tag3 += "_red";
+                        }
+                        else if (i == 10)
+                        {
+                            label3 = "Very much";
+                            tag3 += "_green";
+                        }
+                        <li>
+                            @Html.RadioButton("#a3", @i)
+                            <label>@i</label>
+                            <@tag3>@label3<@("/"+tag3)>
+                        </li>
+                    }
+                }
+
+                <img src="~/Resources/green.png" style="margin:auto; width:50px;" />
+            </ul>
+        </form>
+    </div>
+
+    <!-- satisfied -->
+    <div class="wrap">
+        <form action="">
+            <label class="statement">@Session["q4"]</label>
+            <ul class='likert'>
+                <img src="~/Resources/red.png" style="margin:auto; width:50px;" />
+                @{
+                    var label4 = "";
+                    var tag4 = "label";
+
+                    for (var i = 1; i <= 10; i++)
+                    {
+                        label4 = "";
+                        tag4 = "label";
+                        if (i == 1)
+                        {
+                            label4 = "Not at all";
+                            tag4 += "_red";
+                        }
+                        else if (i == 10)
+                        {
+                            label4 = "Very much";
+                            tag4 += "_green";
+                        }
+                        <li>
+                            @Html.RadioButton("#a4", @i)
+                            <label>@i</label>
+                            <@tag4>@label4<@("/"+tag4)>
+                        </li>
+                    }
+                }
+
+                <img src="~/Resources/green.png" style="margin:auto; width:50px;" />
+            </ul>
+        </form>
+    </div>
+
+    <!-- likeable -->
+    <div class="wrap">
+        <form action="">
+            <label class="statement">@Session["q5"]</label>
+            <ul class='likert'>
+                <img src="~/Resources/red.png" style="margin:auto; width:50px;" />
+                @{
+                    var label5 = "";
+                    var tag5 = "label";
+
+                    for (var i = 1; i <= 10; i++)
+                    {
+                        label5 = "";
+                        tag5 = "label";
+                        if (i == 1)
+                        {
+                            label5 = "Not at all";
+                            tag5 += "_red";
+                        }
+                        else if (i == 10)
+                        {
+                            label5 = "Very much";
+                            tag5 += "_green";
+                        }
+                        <li>
+                            @Html.RadioButton("#a5", @i)
+                            <label>@i</label>
+                            <@tag5>@label5<@("/"+tag5)>
+                        </li>
+                    }
+                }
+
+                <img src="~/Resources/green.png" style="margin:auto; width:50px;" />
+            </ul>
+        </form>
+    </div>
+
+
+    <!-- recommend  -->
+    <div class="wrap">
+        <form action="">
+            <label class="statement">@Session["q6"]</label>
+            <ul class='likert'>
+                <img src="~/Resources/red.png" style="margin:auto; width:50px;" />
+                @{
+                    var label6 = "";
+                    var tag6 = "label";
+
+                    for (var i = 1; i <= 10; i++)
+                    {
+                        label6 = "";
+                        tag6 = "label";
+                        if (i == 1)
+                        {
+                            label6 = "Not at all";
+                            tag6 += "_red";
+                        }
+                        else if (i == 10)
+                        {
+                            label6 = "Very much";
+                            tag6 += "_green";
+                        }
+                        <li>
+                            @Html.RadioButton("#a6", @i)
+                            <label>@i</label>
+                            <@tag6>@label6<@("/"+tag6)>
+                        </li>
+                    }
+                }
+
+                <img src="~/Resources/green.png" style="margin:auto; width:50px;" />
+            </ul>
+        </form>
+    </div>
+
+
+    <!-- with or without Bob -->
+    <form action="">
+        <label class="statement">@Session["q7"]</label>
+        <div class="dropdown">
+            <select id="a7" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <option value="">-- Select one --</option>
+                <option value="With the Pacer">With the virtual player</option>
+                <option value="Without the Pacer">Without the virtual player</option>
+            </select>
+        </div>
+    </form>
+    <br><br>
+
+    
+
+    <!-- thoughts Bob  -->
+    <form action="">
+        <label class="statement">
+            @Session["q8"]
+        </label>
+        <textarea id="a8" rows="3" cols="70"></textarea>
+    </form>
+    <br><br>
+
+    <!-- 01 - general  -->
+    <form action="">
+        <label class="statement">
+            @Session["q01"]
+        </label>
+        <textarea id="a01" rows="3" cols="70"></textarea>
+    </form>
+    <br><br>
+
+    <!-- 02 - bugs  -->
+    <form action="">
+        <label class="statement">
+            @Session["q02"]
+        </label>
+        <textarea id="a02" rows="3" cols="70"></textarea>
+    </form>
+
+    <br> <br> <br>
+
+    @*<div class="wait" id='loadingmessage' style='display:none'>
+            <p style="text-align:center;">
+                <img src='../Images/loader.gif' height="100" />
+            </p>
+        </div>*@
+
+    <div style="text-align:center;">
+        <button class="myButton" name="personalInfo" id="cont_str_info_id" onclick="SendSurvey(); return false;">Next</button>
+    </div>
+</body>
+</html>

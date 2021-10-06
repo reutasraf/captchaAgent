@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ThankYou</title>
+</head>
+<body>
+    <center>
+        <h3 class="text-center">Thank You!</h3>
+        <h3 class="text-center">You have successfully completed your HIT!</h3>
+    </center>
+    <table align="center">
+        <tr></tr>
+        <tr></tr>
+        <tr>
+            <td style="text-align: center">
+                <h3>
+                    Please click on the button to finish the task and get your reward.
+                </h3>
+            </td>
+         </tr>
+         <!--<tr>
+            <td style="text-align: center">
+                <h3>
+                    Please give us XXX hours to process the bonus payment.
+                </h3>
+            </td>
+        </tr>-->
+    </table>
+
+    <form id="PostForm" name="formID" action="https://workersandbox.mturk.com/mturk/externalSubmit" method="POST">
+    @*<form id="PostForm" name="formID" action="https://www.mturk.com/mturk/externalSubmit" method="POST">*@
+        <br>
+        <input type="hidden" name="assignmentId" value="@(Session["turkAss"] as string)">
+        <input type="hidden" name="workerId" value="@(Session["user_id"] as string)">
+        <input type="hidden" name="hitId" value="@(Session["hitId"] as string)">
+
+        <center><input type="submit" class="btn btn-primary center-block" value="End HIT and redirect"/></center>
+    </form>
+
+</body>
+</html>

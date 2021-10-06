@@ -1,0 +1,93 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    function SendSurvey2() {
+        var i;
+        var answers = [];
+        var additionalAnswers = [];
+
+        var currName = "";
+        var currVal1 = "";
+        var currVal2 = "";
+        var ansVal = "";
+
+        // survey questions
+        for (i = 1; i <= 1; i++) {
+            currName = "";
+            currVal1 = "";
+            currVal2 = "";
+            ansVal = "";
+
+            currName = "#a" + i.toString();
+            currVal1 = $(currName).val();
+            currVal2 = $("input[name=" + currName + "]:checked").val();
+            if (!(!currVal1 || currVal1 == "")) {
+                ansVal = currVal1;
+            }
+            else if (!(!currVal2 || currVal2 == "")) {
+                ansVal = currVal2;
+            }
+            else {
+                alert("Please answer all the questions.");
+                return;
+            }
+            answers.push(ansVal);
+        }
+
+        
+
+        $.ajax({
+            method: "POST",
+            //url: "/Experiments/SendPersonalInfoCont",
+            url: "/HelperPacer/Experiments/SendPersonalInfoCont",
+
+            data: {
+                answers: answers,
+            },
+
+            beforeSend: function () {
+                //$('#loadingmessage').show();
+                $('#cont_str_info_id').prop("disabled", true);
+            },
+
+            success: function (html) {
+                $(".content").html(html);
+                //$('#loadingmessage').hide(); // hide the loading message
+                window.location.replace("/HelperPacer/Experiments/ThankYou");
+            },
+            error: function (jqXHR, exception) {
+                //alert(jqXHR.statusText);
+                alert("Something went wrong. Please contact the HIT requester.");
+                window.location.replace("/HelperPacer/Experiments/ThankYou");
+            }
+        });
+    }
+</script>
+<html>
+<body>
+    
+
+    <h2 style="text-align: center;"><span style="color: #ff6600;"><strong>Feedback Questions</strong></span></h2>
+
+    
+
+    <!-- competence explanation -->
+    <form action="">
+        <label class="statement">
+            If the virtual player had apologized after failing to solve a captcha, would this have any effect on your answers in the previous page?
+        <textarea id="a1" rows="3" cols="70"></textarea>
+    </form>
+    <br><br>
+
+    
+
+    <div style="text-align:center;">
+        <button class="myButton" name="personalInfo" id="cont_str_info_id" onclick="SendSurvey2(); return false;">Submit Feedback</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,525 @@
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <style>
+        img {
+            width: 30%;
+            height:30%;
+        }
+
+         body {
+              background-image: url('/HelperPacer/Resources/background3.jpg');
+              background-repeat: no-repeat;
+              background-size: cover;
+        }
+    </style>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+
+        function createCaptcha() {
+            //clear the contents of captcha div first
+            document.getElementById('captcha').innerHTML = "";
+            //var captcha = ['x', 'o', 'X', '2', 'O', '&'];
+            var captcha = ['1', '2', '3', '4'];
+            var canv = document.createElement("canvas");
+            canv.id = "captcha";
+            canv.width = 150;
+            canv.height = 50;
+            var ctx = canv.getContext("2d");
+            ctx.font = "25px Georgia";
+            ctx.strokeText(captcha.join(""), 0, 30);
+            code = captcha.join("");
+            document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element
+        }
+
+        function sendData() {
+
+            var ageVal = $("#age").val();
+            if (!ageVal || ageVal == "") {
+                alert("Please choose your age.");
+                return; //Returns - do not send request to server
+            }
+
+            var genderVal = $("#gender").val();
+            if (!genderVal || genderVal == "") {
+                alert("Please choose your gender.");
+                return; //Returns - do not send request to server
+            }
+
+            var educationVal = $("#education").val();
+            if (!educationVal || educationVal == "") {
+                alert("Please choose your education.");
+                return; //Returns - do not send request to server
+            }
+
+            var countryVal = $("#country2").val();
+            if (!countryVal || countryVal == "" || countryVal == "-1") {
+                alert("Please choose your country.");
+                return; //Returns - do not send request to server
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "/HelperPacer/Experiments/PersonalDetailsData",
+                data: {
+                    gender: genderVal,
+                    age: ageVal,
+                    education: educationVal,
+                    country: countryVal
+                },
+                success: function (data) {
+                    window.location.replace("/HelperPacer/Experiments/Main"); //in success - go to another page
+                },
+                error: function (data) {
+                    alert("error!");
+                    window.location.replace("/HelperPacer/Experiments/Main");
+                }
+
+            });
+        }
+
+        function start() {
+            createCaptcha();
+            //populateCountries("country2");
+            $("#gameBack1").show();
+            $("#gameBack2").hide();
+            $("#gameBack3").hide();
+            $("#gameBack2Explan").hide();
+            $("#gameBack2Example").hide();
+        }
+
+
+        $(document).ready(function () {
+            $("#gameBack1Button").click(function () {
+                $("#gameBack1").hide();
+                $("#gameBack2").show();
+                $("#gameBack2Explan").hide();
+                $("#gameBack3").hide();
+                $("#gameBack2Example").hide();
+            })
+
+            $("#gameBack2Button").click(function () {
+                $("#gameBack1").hide();
+                $("#gameBack2").hide();
+                $("#gameBack3").hide();
+                $("#gameBack2Explan").show();
+                $("#gameBack2Example").hide();
+            })
+
+            $("#gameBack2ExplanButton").click(function () {
+                if (clic_cor == 1 && clic_fol == 1) {
+                    $("#gameBack1").hide();
+                    $("#gameBack2").hide();
+                    $("#gameBack3").hide();
+                    $("#gameBack2Explan").hide();
+                    $("#gameBack2Example").show();
+                }
+                
+            })
+
+            $("#gameBack2ExampleButton").click(function () {
+                var numOfTries = 0;
+                numOfTries++;
+                var result = true;
+
+                // create a map and insert values in.
+                var quizMap = {};
+
+                quizMap["forbidden_keys"] = "joint_drop";
+                quizMap["game_end"] = "together";
+                quizMap["competition"] = "no";
+
+                for (var question in quizMap) {
+                    var curr = document.getElementsByName(question);
+                    curr_value = null;
+                    for (var i = 0; i < curr.length; i++) {
+                        if (curr[i].checked) {
+                            curr_value = curr[i].value;
+                        }
+                    }
+
+                    questionLabel = document.getElementById(question);
+                    // error
+                    if (quizMap[question] != curr_value) {
+                        result = false;
+                        questionLabel.style.color = 'red';
+                    }
+                        // correct
+                    else {
+                        questionLabel.style.color = 'ForestGreen ';
+                    }
+                }
+
+                if (result == true) {
+                    //event.preventDefault();
+                    if (document.getElementById("cpatchaTextBox").value == code) {
+                        $("#myMSG").hide();
+                        alert("Success: You solved the capcha and answer correctly!");
+                        $("#gameBack1").hide();
+                        $("#gameBack2").hide();
+                        $("#gameBack3").show();
+                        $("#gameBack2Explan").hide();
+                        $("#gameBack2Example").hide();
+                    } else {
+                        document.getElementById('cpatchaTextBox').value = '';
+                        $("#myMSG").css('color', 'red').html("Try again!").show();
+                    }
+                }
+                    // incorrect
+                else if (result == false) {
+                    alert("Please try again...");
+                    return;
+                }
+
+
+                
+
+                
+            })
+        })
+    </script>
+</head>
+<body onload="start()">
+    <audio id="youLeaderAudio">
+        <source src="~/Resources/leader.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="pacerLeaderAudio">
+        <source src="~/Resources/laugh.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="correctAudio">
+        <source src="~/Resources/correct.mp3" type="audio/mp3" />
+    </audio>
+	<audio id="incorrectAudio">
+        <source src="~/Resources/incorrect.mp3" type="audio/mp3" />
+    </audio>
+    <center><h1 class="text-center">Solve the captcha</h1></center>
+    <div id="gameBack1" style="background: rgba(255,255,255,0.6);">
+        <center><h3 class="text-center">HIT Background</h3></center>
+        <br />
+        <table cellspacing="0" align="center">
+            <tr>
+                <td><h3 class="text-center" style="color:red; font-weight:normal">Please read the instructions carefully.</h3></td>
+            </tr>
+            <tr>
+                <td><h3 class="text-center" style="color:red; font-weight:normal">It takes about 5-7 minutes to complete this HIT.</h3></td>
+        </table>
+        <br />
+        <br />
+        <center>
+            <button id="gameBack1Button" type="button" class="btn btn-primary center-block">Next</button>
+        </center>
+    </div>
+
+    <div id="gameBack2" style="background: rgba(255,255,255,0.6);">
+        <center><h3 class="text-center">HIT Background</h3></center>
+        <table cellspacing="0" align="center">
+            <tr>
+                <td>
+                    <center><img src="~/Resources/captcha.png" height="200" width="200" align="middle"></center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                        <h3 style="color:black; font-weight:normal">
+                            In this HIT ,you are asked to solve captchas. To help you we have added a virtual player </br>
+                            who will solve captchas alongside you. You and the virtual player have reach a joint </br>
+                            score of 30 solved captchas together to finish the task.
+                        </h3>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <center>
+                        <h3 style="color:black; font-weight:normal">
+                            Be aware that the virtual player can make mistakes . Each mistake made by the virtual player will decrease the joint score by 3. </br>
+                            Unlike the virtual player, your mistakes won't harm the score.
+                        </h3>
+                    </center>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <center><button id="gameBack2Button" type="button" class="btn btn-primary center-block">Next</button></center>
+        <br /><br />
+
+
+    </div>
+
+    <div id="gameBack2Explan" style="background: rgba(255,255,255,0.6);">
+        <center>
+            <!--<h3 class="text-center">Game Background</h3>-->
+            <table cellspacing="0" align="center">
+                <tr>
+                    <td><h3 style="color:black; font-weight:normal">Here is what your interface will look like:</h3></td>
+                </tr>
+            </table>
+            <img src="~/Resources/printScreen.png" style="width:894px; height:418px">
+            </br>
+            <div style="margin-bottom: 10px;">
+                <div style="margin-top: 10px;" >
+                    <a>when you or the virtual player solve the captcha this sound will be played  </a>
+                    <button id="correctbutton" onclick="playCorrectAudio()" type="button">sound</button>
+                    <script>
+                        var correctSound = document.getElementById("correctAudio");
+                        var clic_cor = 0;
+                        var clic_fol = 0;
+                        function playCorrectAudio() {
+                            correctSound.play();
+                            clic_cor = 1;
+                        }
+                    </script>
+                </div>
+				<div style="margin-top: 10px;" >
+                    <a>when you or the virtual player make a mistake while solving the captcha this sound will be played  </a>
+                    <button id="incorrectbutton" onclick="playInCorrectAudio()" type="button">sound</button>
+                    <script>
+                        var incorrectSound = document.getElementById("incorrectAudio");
+
+                        function playInCorrectAudio() {
+                            incorrectSound.play();
+                            clic_fol = 1;
+                        }
+                    </script>
+                </div>
+            </div>
+            <button id="gameBack2ExplanButton" type="button" class="btn btn-primary center-block">Next</button>
+        </center>
+    </div>
+
+    <div id="gameBack2Example" style="background: rgba(255,255,255,0.6);">
+        <center>
+            <table align="center">
+                <tr>
+                    <td><h3 class="text-center" style="color:#337ab7; font-weight:normal; font-weight: bold">Just to make sure you understand the HIT, please solve the following captcha and answer the questions.</h3></td>
+                </tr>
+                <tr>
+                    <td><h3 class="text-center" style="color:crimson; font-weight:normal; font-weight: bold">In the end click 'next'.</h3></td>
+                </tr>
+                <tr></tr>
+            </table>
+            <div id="myMSG">
+            </div>
+            <div id="captcha">
+            </div>
+            <input type="text" placeholder="Captcha" id="cpatchaTextBox" autocomplete="off" />
+           <script>
+
+               var numOfTries = 0;
+               function cli() {
+               
+               numOfTries++;
+               var result = true;
+
+               // create a map and insert values in.
+               var quizMap = {};
+
+               quizMap["forbidden_keys"] = "joint_drop";
+               quizMap["game_end"] = "together";
+               quizMap["competition"] = "no";
+
+               for (var question in quizMap) {
+                   var curr = document.getElementsByName(question);
+                   curr_value = null;
+                   for (var i = 0; i < curr.length; i++) {
+                       if (curr[i].checked) {
+                           curr_value = curr[i].value;
+                       }
+                   }
+
+                   questionLabel = document.getElementById(question);
+                   // error
+                   if (quizMap[question] != curr_value) {
+                       result = false;
+                       questionLabel.style.color = 'red';
+                   }
+                       // correct
+                   else {
+                       questionLabel.style.color = 'ForestGreen ';
+                   }
+               }
+
+               if (result == true) {
+                   //event.preventDefault();
+                   if (document.getElementById("cpatchaTextBox").value == code) {
+                       $("#myMSG").hide();
+                       alert("Success: You solved the capcha and answer correctly!");
+                       $("#gameBack1").hide();
+                       $("#gameBack2").hide();
+                       $("#gameBack3").show();
+                       $("#gameBack2Explan").hide();
+                       $("#gameBack2Example").hide();
+                   } else {
+                       document.getElementById('cpatchaTextBox').value = '';
+                       $("#myMSG").css('color', 'red').html("Try again!").show();
+                   }
+               }
+                   // incorrect
+               else if (result == false) {
+                   if (numOfTries >= 3) {
+                       alert("Sorry, too much tries...");
+                       window.location.replace("/HelperPacer/Experiments/RedirectToCancel");
+                       return;
+                   }
+                  
+                   alert("Please try again...");
+                   
+                   
+                  
+                   return;
+               }
+ 
+               }
+           </script>
+           
+        </center>
+
+        <p id="forbidden_keys"><b>What happens if the virtual player wrong?</b></p>
+        <input type="radio" name="forbidden_keys" value="joint_drop">The joint total will be reduced by 3<br>
+        <input type="radio" name="forbidden_keys" value="nothing">Nothing<br>
+        <input type="radio" name="forbidden_keys" value="yellow">We lose a life in the game<br>
+
+        <br> <br>
+
+        <p id="game_end"><b>When will the task end? Choose the most correct answer.</b></p>
+        <input type="radio" name="game_end" value="me_alone">When virtual player has solved 30 captchas<br>
+        <input type="radio" name="game_end" value="bob_alone">When I have solved 30 captchas alone<br>
+        <input type="radio" name="game_end" value="together">When the joint score counter shows 30, namely when the virtual player and I have solved 30 captchas together<br>
+
+        <br> <br>
+
+        <p id="competition"><b>Are you and virtual player competing?</b></p>
+        <input type="radio" name="competition" value="yes">Yes<br>
+        <input type="radio" name="competition" value="no">No<br>
+        <center>
+           @*<button type="button" id="gameBack2ExampleButton" class="btn btn-primary center-block">Next</button>*@
+            <button type="button" onclick="cli()" class="btn btn-primary center-block">Next</button>
+        </center>
+
+    </div>
+
+
+    <div id="gameBack3" style="background: rgba(255,255,255,0.6);">
+        <center><h3 class="text-center">Personal Details Before We Start</h3></center>
+
+        <table align="center">
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td><h3 style="color:black; font-weight:normal">Your Gender</h3></td>
+                <td>
+                    <div class="dropdown">
+                        <select id="gender" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <option value="">-- select one --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                
+                
+                <td><h3 style="color:black; font-weight:normal">Your Age</h3></td>
+                
+                <td>
+                    <h4>
+                        <span style="color: #000080;">
+                            
+                            <input type="number" class="css-input" id="age" min="18" max="120">
+                        </span>
+                    </h4>
+                    <br />
+                    
+                    
+                    @*<div class="dropdown">
+                        <select id="age" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <option value="">-- select one --</option>
+                            <option value="11-20">11-20</option>
+                            <option value="21-25">21-25</option>
+                            <option value="26-30">26-30</option>
+                            <option value="31-35">31-35</option>
+                            <option value="36-40">36-40</option>
+                            <option value="41-45">41-45</option>
+                            <option value="46-50">46-50</option>
+                            <option value="51-55">51-55</option>
+                            <option value="56-60">56-60</option>
+                            <option value="61-65">61-65</option>
+                            <option value="66-70">66-70</option>
+                        </select>
+                    </div>*@
+                </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td><h3 style="color:black; font-weight:normal">Your Education</h3></td>
+                <td>
+                    <div class="dropdown">
+                        <select id="education" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <option value="">-- select one --</option>
+                            <option value="Primary education">Primary education</option>
+                            <option value="Secondary education">Secondary education</option>
+                            <option value="Bachelor">Bachelor</option>
+                            <option value="Master">Master</option>
+                            <option value="Doctoral">Doctoral</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td><h3 style="color:black; font-weight:normal">Your Country</h3></td>
+                <td>
+                    <div class="dropdown">
+                        <select id="country2" name="country2" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <option value="">-- select one --</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Canada">Canada</option>
+                            <option value="European Union">European Union</option>
+                            <option value="China">China</option>
+                            <option value="India">India</option>
+                            <option value="Israel">Israel</option>
+                            <option value="Japan">Japan</option>
+                            <option value="Kazakhstan">Kazakhstan</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="New Zealand">New Zealand</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Ukraine">Ukraine</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="USA">USA</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <center>
+            <h3 class="text-center" style="color:red">Press "next" to continue to the HIT.</h3></br>
+            <button type="button" id="gameBack3Button" class="btn btn-primary center-block" onclick="sendData()">Next</button>
+        </center>
+    </div>
+
+</body>
+</html>

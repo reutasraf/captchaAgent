@@ -1,0 +1,183 @@
+﻿@model IEnumerable<ExperimentCaptcha.Models.SurveyInfo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssignmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeOfExperiment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumOfSucssess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumOfFaults)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobNumOfSucssess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobNumOfFaults)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q4)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q5)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q6)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q7)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q8)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q01)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q02)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Q03)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.surveyTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.surveyTimeStart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.surveyTimeEnd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hitTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobNumTrueScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.userNumOfTrueScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.captchaTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignmentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HitId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TypeOfExperiment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumOfSucssess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumOfFaults)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobNumOfSucssess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobNumOfFaults)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q4)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q5)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q6)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q7)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q8)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q01)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q02)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Q03)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.surveyTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.surveyTimeStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.surveyTimeEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.hitTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobNumTrueScore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userNumOfTrueScore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.captchaTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

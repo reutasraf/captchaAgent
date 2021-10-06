@@ -1,0 +1,195 @@
+﻿@model IEnumerable<ExperimentCaptcha.Models.Experiment>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssignmentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeOfExperiment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumOfSucssess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumOfFaults)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountChecker)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CountCheckerBob)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Goods)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bads)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bobs)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Paces)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobNumOfSucssess)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobNumOfFaults)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BobTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BeginTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FinishTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Age)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Education)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumOfTries)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.startTimeGame)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Instruction_time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.quizTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignmentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TypeOfExperiment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumOfSucssess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumOfFaults)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountChecker)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CountCheckerBob)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Goods)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bads)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bobs)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Paces)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobNumOfSucssess)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobNumOfFaults)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BobTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HitId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BeginTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FinishTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mobile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Age)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Education)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumOfTries)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.startTimeGame)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Instruction_time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.quizTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

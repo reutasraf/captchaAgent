@@ -1,0 +1,1174 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+
+    <title>Index</title>
+    <script>
+         function functionAlert(msg, myYes) {
+            var confirmBox = $("#confirm");
+            confirmBox.find(".message").text(msg);
+            confirmBox.find(".yes").unbind().click(function() {
+                confirmBox.hide();
+                flagForTry = false;
+                setTimeout('hideMistake()', 2000);
+            });
+            confirmBox.find(".yes").click(myYes);
+            confirmBox.show();
+
+         }
+    </script>
+    <style>
+        input[type=text] {
+            padding: 12px 20px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        canvas {
+            /*prevent interaction with the canvas*/
+            pointer-events: none;
+        }
+
+        body {
+            
+           
+            background-image: url('/HelperPacer/Resources/background3.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        #yourboard {
+            /*border:7px inset blue;*/
+            position: absolute;
+            top: 180px;
+            left: 56px;
+            /*border-radius: 25px;
+            width: 400px;
+            height: 100%;*/
+            margin-top: 50px;
+            /*background-color: antiquewhite;
+            background: rgba(255,255,255,0.6);*/
+        }
+
+        #playerImg {
+            position: absolute;
+            top: 125px;
+            left: 135px;
+        }
+
+        #pacerboard {
+            position: absolute;
+            /*border:7px inset #d76849;*/
+            border-radius: 25px;
+            top: 290px;
+            right: 120px;
+            width: 250px;
+            height: 200px;
+            /*background-color: antiquewhite; /* rgba(255,255,255,0.9);*/
+        }
+        /*pacercaptcha {
+            margin-top: 50px;
+            font: "30px Georgia";
+            text-align: "center";
+        }*/
+        #confirm {
+            display: none;
+            background-color: #F3F5F6;
+            color: #000000;
+            border: 1px solid #aaa;
+            position: fixed;
+            width: 300px;
+            height: 100px;
+            left: 40%;
+            top: 90%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+            #confirm button {
+                background-color: #FFFFFF;
+                color: #000000;
+                display: inline-block;
+                border-radius: 12px;
+                border: 4px solid #aaa;
+                padding: 5px;
+                text-align: center;
+                width: 60px;
+                cursor: pointer;
+            }
+
+            #confirm .message {
+                text-align: center;
+            }
+
+        #pacerImg {
+            position: absolute;
+            top: 120px;
+            right: 150px;
+        }
+        #pacerErr {
+            position: absolute;
+            top: 550px;
+            right: 150px;
+        }
+        #userErr {
+            position: absolute;
+            top: 550px;
+            left: 150px;
+        }
+        #myMSG {
+            font-size: 200%;
+            font-weight: bold;
+            
+        }
+        #captcha {
+            margin-top:40px;
+            top: 20px;
+        }
+
+
+        #backgroundImg {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: unset;
+            height: unset;
+        }
+
+        #score {
+            font-size: 300%;
+        }
+        #pacer_score {
+            position: absolute;
+            top: 40px;
+            right: 150px;
+            font-size: 200%;
+            text-align: left;
+            color: black;
+        }
+        #user_score {
+            position: absolute;
+            top: 40px;
+            left: 150px;
+            font-size: 200%;
+            text-align: left;
+            color: black;
+        }
+
+        #sorryMSG {
+            font-size: 180%;
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+
+        #scoreTitle {
+            font-size: 300%;
+        }
+        #turnTitle {
+            font-size: 300%;
+        }
+
+        #scoreMsg {
+            font-size: 180%;
+            text-align: center;
+            font-weight: bold;
+            color: red;
+        }
+
+        /*#myTable {
+            border-radius: 25px;
+            text-align: center;
+            width: 800px;
+            height: 100px;
+            font-size: 18px;
+            border-collapse: separate collapse;
+            background: rgba(255,255,255,0.6);
+        }
+
+            #myTable th, #myTable td {
+                text-align: center;
+                font-size: 24px;
+            }
+
+            #myTable tr {
+                border: 1px solid black;
+                text-align: center;
+            }
+
+                #myTable tr:hover {
+                    background-color: #f1f1f1;
+                }*/
+    </style>
+
+</head>
+<body onload="start()">
+
+    @*<img id="backgroundImg" src="~/Resources/background1.jpg" height="1000" width="3000">*@
+    
+    <center>
+        <div id="scoreTitle">Joint score: </div>
+        <div id="user_score"></div>
+        <div id="pacer_score"></div>
+
+        <div id="score">
+            0
+            @*<table id="myTable">
+
+                <tr class="header">
+                    <th id="youT" style="width:50%;">You</th>
+                    <th id="pacerT" style="width:50%;">Pacer</th>
+                </tr>
+                <tr>
+                    <td id="scoreYouT">0</td>
+                    <td id="scsorePacerT">0</td>
+                </tr>
+            </table>*@
+        </div>
+
+        <div id="scoreMsg"><br><br>Reducing 3 points due to the virtual player's mistake...</div>
+        <div id="turnTitle"><br><br>Your turn </div>
+        <div id="confirm">
+            <div class="message">Message from the virtual player: oops! I'm so sorry I was wrong</div><br>
+            <button class="yes" id="">OK</button>
+        </div>
+        <audio id="youLeaderAudio">
+            <source src="~/Resources/leader.mp3" type="audio/mp3" />
+        </audio>
+        <audio id="pacerLeaderAudio">
+            <source src="~/Resources/laugh.mp3" type="audio/mp3" />
+        </audio>
+        <audio id="correctAudio">
+            <source src="~/Resources/correct.mp3" type="audio/mp3" />
+        </audio>
+        <audio id="incorrectAudio">
+            <source src="~/Resources/incorrect.mp3" type="audio/mp3" />
+        </audio>
+    </center>
+    <img id="pacerImg" src="~/Resources/pacer_happy.png" height="200" width="200">
+    <img id="playerImg" src="~/Resources/man.png" height="175" width="200">
+    <img id="pacerErr" src="~/Resources/117-arrow.png" height="100" width="100">
+    <img id="userErr" src="~/Resources/117-arrow.png" height="100" width="100">
+
+
+    <div id="pacerboard">
+        <div id="sorryMSG">
+        </div>
+        <div id="pacercaptcha" style="margin-top: 50px;">
+        </div>
+        <div id="rects">
+            <canvas id="rectsCanvas"></canvas>
+        </div>
+    </div>
+    <center>
+        <div id="yourboard">
+            <div id="myCheckDiv">
+                </br>
+                </br>
+                </br>
+                </br>
+                <div id="myCheckDivTxt" style="color: red; font-size: 100%; font-weight: bold">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="myC" id="myCheckBtn1">1</button>
+                    <button type="button" class="myC" id="myCheckBtn2">2</button>
+                    <button type="button" class="myC" id="myCheckBtn3">3</button>
+                </div>
+            </div>
+
+            <div id="captcha">
+            </div>
+            <div id="myMSG">
+            </div>
+            <input type="text" placeholder="Captcha" id="cpatchaTextBox" autocomplete="off" />
+            <button id="myBtn" type="button">Submit</button>
+            <script>
+                var input = document.getElementById("cpatchaTextBox");
+                //alert("in script");
+                input.addEventListener("keyup", function (event) {
+                    //alert("set Listener!");
+                    if (event.keyCode === 13) {
+                        //alert("enter recognized!");
+                        event.preventDefault();
+                        document.getElementById("myBtn").click();
+                    }
+                });
+            </script>
+            <div id="timeLeft">
+                <h3>HIT will be over in</h3>
+            </div>
+            <br>
+            <div id="statistic">
+            </div>
+
+        </div>
+    </center>
+</body>
+
+</html>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    //<script type="text/javascript" src="jquery.js">
+    var flagForTry = false;
+    var scoremsg = "<br><br>Reducing 3 points <br> due to the virtual player's mistake..."
+    var experimentName = "HelperPacer_0Sorry"; //name of the experiment in the db
+    var sorrymsg = "Wrong answer. Reducing 3 points..." //when the pacer mistakes, this msg is displayed
+    var mistakePoints = [17, 101]; //points that define when the pacer mistakes
+    var numOfSorrymsg = 0; // how many times the sorrymsg displays
+    var finalScore = 24; //target score
+    var mistake_player = 12;
+    var mistake_player_flag = 0;
+    //var finalScore = 5; //target score
+    var mistakePunishment = 3;
+
+
+    var MAX_TIME = 30; //number of minutes
+    var MAX_ROUNDS = 9999;
+    var smapleInterval = 10000;
+    var flagSendData = 0;
+    var flagYouHere = 0;
+    var code;
+    //var input;
+    var averageTime = 0;
+    var totalTime = 0;
+
+    var you = {};
+    var bob = {};
+
+    var leader;
+    var youLeadSound = document.getElementById("youLeaderAudio");
+    var pacerLeadSound = document.getElementById("pacerLeaderAudio");
+    var correctSound = document.getElementById("correctAudio");
+	var incorrectSound = document.getElementById("incorrectAudio");
+
+
+    var pacerPace = 5500;
+    var countSucssesForMinute = 0;
+    var countSucssesForMinuteBob = 0;
+    var countFaultForMinute = 0;
+    var counterStr = "";
+    var counterTimeForCaptchaStr = "";
+    var counterTimeForCaptchaStrBob = "";
+    var interv;
+    var animationFlag = 0;
+    var turn_to_play = 0;
+
+    var mistakeIndex = 0;
+    var mistakeFlag = 0;
+
+    you.name = "You";
+    you.countSucsses = 0;
+    you.countFault = 0;
+    you.startTime = new Date();
+    you.finishTime = you.startTime;
+
+    bob.name = "Bob";
+    bob.countSucsses = 0;
+    bob.countFault = 0;
+    bob.startTime = you.startTime;
+    bob.finishTime = bob.startTime;
+    zero = 0;
+    document.getElementById('pacer_score').innerHTML = "virtual player score: " + zero.toString();
+    document.getElementById('user_score').innerHTML = "your score: " + zero.toString();;
+
+
+
+
+    var start_time = you.startTime.getHours() + ":" + you.startTime.getMinutes() + ":" + you.startTime.getSeconds();
+    function createCaptcha() {
+        //clear the contents of captcha div first
+        document.getElementById('captcha').innerHTML = "";
+  
+        var charsArray = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%^&*";
+        var lengthOtp = 6;
+        var captcha = [];
+        for (var i = 0; i < lengthOtp; i++) {
+            //below code will not allow Repetition of Characters
+            var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+            if (captcha.indexOf(charsArray[index]) == -1)
+                captcha.push(charsArray[index]);
+            else i--;
+        }
+        var canv = document.createElement("canvas");
+        canv.id = "captcha";
+        canv.width = 300;
+        canv.height = 100;
+
+        var ctx = canv.getContext("2d");
+        ctx.font = "50px Georgia";
+        ctx.textAlign = "center";
+        ctx.strokeText(captcha.join(""), 150, 50);
+        //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+        code = captcha.join("");
+        document.getElementById("captcha").appendChild(canv); // adds the canvas to the body element. Hi alon!
+    }
+
+
+
+
+
+    function createPacerCaptcha() {
+        //clear the contents of captcha div first
+        document.getElementById('pacercaptcha').innerHTML = "";
+        var charsArray = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%^&*";
+        var lengthOtp = 6;
+        var pacercaptcha = [];
+        for (var i = 0; i < lengthOtp; i++) {
+            //below code will not allow Repetition of Characters
+            var index = Math.floor(Math.random() * charsArray.length + 1); //get the next character from the array
+            if (pacercaptcha.indexOf(charsArray[index]) == -1)
+                pacercaptcha.push(charsArray[index]);
+            else i--;
+        }
+        document.getElementById('pacercaptcha').innerHTML = "";
+        var pacercanv = document.createElement("canvas");
+        pacercanv.id = "pacercaptcha";
+        pacercanv.width = 300;
+        pacercanv.height = 90;
+        var pacerctx = pacercanv.getContext("2d");
+        pacerctx.font = "50px georgia";
+        pacerctx.textAlign = "center";
+        //pacerctx.fillStyle = "black";
+        //pacerctx.fillRect(0, 0, 300, 50);
+        pacerctx.strokeText(pacercaptcha.join(""), 150, 50);
+        //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+        document.getElementById("pacercaptcha").appendChild(pacercanv); // adds the canvas to the body element. hi alon!
+    }
+
+
+    function not_time_to_player_mistake() {
+        if ((mistake_player <= you.countSucsses + bob.countSucsses) && mistake_player_flag == 0) {
+            //alert("valid");
+            mistake_player_flag = 1;
+            return false;
+        }
+        return true;
+    }
+
+
+    function validateCaptcha() {
+        
+        //alert(document.getElementById("cpatchaTextBox").value);
+        if (document.getElementById("cpatchaTextBox").value == code && not_time_to_player_mistake()) {
+            you.countSucsses++;
+            countSucssesForMinute++;
+            rightCounterPerX++;
+            var today = new Date();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            counterTimeForCaptchaStr = counterTimeForCaptchaStr + "~S-" + time;
+
+            return 1;
+            //alert("Valid Captcha");
+        } else {
+            you.countFault++;
+            countFaultForMinute++;
+            faultCounterPerX++;
+            var today = new Date();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            counterTimeForCaptchaStr = counterTimeForCaptchaStr + "~F-" + time;
+            return 0;
+            //alert("Invalid Captcha. try Again");
+        }
+    }
+
+    function sendData(fin) { //}
+
+        if (flagSendData == 0) {
+            //flagSendData = 1; I changed.
+            var youTime = (you.finishTime - you.startTime);
+            var bobTime = (bob.finishTime - bob.startTime);
+            var now = new Date();
+            var totalTime = parseInt((now - you.startTime) / 1000);
+            getUpdates();
+            //counterStr = counterStr + "!" + counterTimeForCaptchaStr + "!";
+            var data0 = {
+                NumOfSucssess: you.countSucsses,
+                NumOfFaults: you.countFault,
+                Time: youTime,
+                CountChecker: counterStr,
+                Timeline: counterTimeForCaptchaStr,
+                TimelineBob: counterTimeForCaptchaStrBob,
+                BobNumOfSucssess: bob.countSucsses + mistakePunishment * bob.countFault,
+                BobNumOfFaults: bob.countFault,
+                BobTime: bobTime,
+                pace: pacerPace,
+                finF: fin,
+                interval: smapleInterval,
+                start: start_time,
+                elapsed: totalTime,
+                name: experimentName
+            };
+            //var myJson = JSON2.stringify(data0);
+            $.ajax({
+                method: "POST",
+                url: "/HelperPacer/Experiments/SaveData",
+                //url: "/Experiments/SaveData",
+
+                data: data0,
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                success: function (data) { //I changed!
+                    counterStr = "";
+                    if (fin == 1) {
+                        
+                        //window.location.replace("/Experiments/Survey"); //in success - go to another page
+                        window.location.replace("/HelperPacer/Experiments/Survey"); //in success - go to another page
+
+                    } else {
+                        
+                        oldPace = pacerPace;
+                        //pacerPace = data.newPace;
+                        clearTimeout(RobotTimeout);
+                        var tillNext = (oldPace - (new Date() - startRobot)) * pacerPace / oldPace;
+
+                        RobotTimeout = setTimeout('runRobot()', tillNext);
+
+                    }
+                },
+                error: function (data) {
+                    //alert("error!");
+                    window.location.replace("/HelperPacer/Experiments/Err");
+                    //window.location.replace("/Experiments/Err");
+                }
+
+            });
+        }
+    }
+
+
+    function stop_myMSG() {
+        $("#myMSG").hide();
+    }
+
+    function run() {
+        
+        if (flagSendData == 0) {
+            //alert("run");
+            var finishTime = new Date();
+            totalTime = (finishTime - you.startTime) / 1000;
+            if (totalTime / 60 < MAX_TIME) {
+                you.finishTime = finishTime;
+                if (flagForTry) {
+                    setTimeout('run()', 100);
+                    return;
+                }
+                var flag = validateCaptcha();
+                document.getElementById('cpatchaTextBox').value = '';
+                if (flag == 1) {
+                    document.getElementById('score').innerHTML = you.countSucsses + bob.countSucsses;
+                    document.getElementById('user_score').innerHTML = "your score: " + you.countSucsses.toString();
+                    timeToMistake();
+                    correctSound.play();
+                   
+                    $("#myMSG").hide();
+                    document.getElementById("cpatchaTextBox").disabled = true;
+                    turn_to_play = 1;
+                    $("#myBtn").hide();
+                    new_runRobot();
+
+
+                    
+                }
+                else {
+                    incorrectSound.play();
+                    
+                    $("#myMSG").css('color', 'red').html("Wrong answer").show();
+                    setTimeout('stop_myMSG()', 7000);
+                    turn_to_play = 0;
+                    createCaptcha();
+                    
+                   // $("#myBtn").hide();
+                   // new_runRobot();
+                }
+            }
+            
+        }
+    }
+
+    var mT = MAX_TIME;
+    var sT = 00;
+
+
+    countSucssesForMinute = 0;
+    countFaultForMinute = 0;
+    var flagCountH = 0;
+    var myCheckBtn = "";
+
+    function countForMinute() {
+
+        flagCountH++;
+        if (flagSendData == 0) {
+
+            setTimeout('countForMinute()', 100000);
+
+
+            sucssesProb = Math.floor(Math.random() * 100);
+
+            if (sucssesProb <= 100 && flagCountH >= 1 && countSucssesForMinute < 1) {
+                $("#myCheckDiv").show();
+
+
+                sucssesProbB = Math.floor(Math.random() * 100);
+                var strB = "";
+                if (sucssesProbB <= 33) {
+                    strB = "1";
+                    myCheckBtn = "myCheckBtn1";
+                }
+                else if (sucssesProbB > 33 && sucssesProbB <= 66) {
+                    strB = "2";
+                    myCheckBtn = "myCheckBtn2";
+                }
+                else {
+                    strB = "3";
+                    myCheckBtn = "myCheckBtn3";
+                }
+                document.getElementById('myCheckDivTxt').innerHTML = "Are you still here? Please press the '" + strB + "' button below to verify.";
+                flagYouHere = 1;
+                setTimeout('HITCancel()', 20000);
+            }
+            countSucssesForMinute = 0;
+        }
+    }
+
+    function HITCancel() {
+        if (flagYouHere == 1) {
+            window.location.replace("/HelperPacer/Experiments/RedirectToCancel");
+        }
+    }
+
+
+    function startTime() {
+        var m = mT;
+        var s = sT;
+        // add a zero in front of numbers<10
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('timeLeft').innerHTML = "HIT will be over in " + m + ":" + s;
+
+        sT--;
+        if (sT == -1) {
+            sT = 59;
+            mT--;
+        }
+
+        if (mT == -1 || you.countSucsses + bob.countSucsses >= finalScore) {
+            //alert("try");
+            sendData(1);
+        }
+        else {
+            t = setTimeout('startTime()', 1000);
+        }
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    
+    function rectsAnimation() {
+        
+        //clearRects();
+        var c = document.getElementById("rectsCanvas");
+        var ctx = c.getContext("2d");
+        for (rectindx = 0; rectindx < 6; rectindx++){
+            ctx.beginPath();
+            ctx.lineWidth = "4";
+            ctx.strokeStyle = "darkGreen";
+            ctx.rect(50 + 35 * rectindx, 5, 30, 30);
+            ctx.stroke();
+        }
+
+        isMistake = animationFlag;
+        rectindx = 0;
+        //interv = setInterval(fillRects, pacerPace/6 - 0.01);
+        fillRects();
+        //AnimationTimeout = setTimeout('fillRects()', pacerPace / 6.0 - 5);
+
+    }
+
+
+    function fillRects() {
+       
+        var c = document.getElementById("rectsCanvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "green";
+        if (animationFlag == 1 && rectindx == 5) {
+            ctx.fillStyle = "green";
+        }
+
+        ctx.fillRect(50 + 35 * rectindx, 5, 30, 30);
+        rectindx+=1;
+
+        if (rectindx >= 6) {
+            
+            clearTimeout(AnimationTimeout);
+            clearRects();
+            changeTurn();
+        } else {
+            AnimationTimeout = setTimeout('fillRects()', pacerPace / 6.0 - 5);
+        }
+
+    }
+
+
+    function clearRects() {
+        var c = document.getElementById("rectsCanvas");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "white";
+        for (var j = 0; j < 6; j++) {
+            ctx.fillRect(50 + 35 * j, 5, 30, 30);
+        }
+        rectindx = 0;
+
+    }
+    function callSend() {
+        var timeNow = new Date();
+        var totalTime = (timeNow - you.startTime) / 1000;
+        if (totalTime < MAX_TIME * 60) {
+            //getUpdates(); //call to get updates moved to sendData so it will be called also in the last time.
+            sendData(0);
+            setTimeout('callSend()', smapleInterval);
+        }
+    }
+
+
+    rightCounterPerX = 0;
+    faultCounterPerX = 0;
+    bobRightCounterPerX = 0;
+    function getUpdates() {
+        counterStr = counterStr + rightCounterPerX + "," + faultCounterPerX + "," + bobRightCounterPerX;// + " # " + time;
+        rightCounterPerX = 0;
+        faultCounterPerX = 0;
+        bobRightCounterPerX = 0;
+
+    }
+
+
+    function start() {
+        
+        $("#myCheckDiv").hide();
+        $("#timeLeft").hide();
+
+        setTimeout('countForMinute()', 60000/2);
+        startTime();
+        
+        averageTime = 0;
+        totalTime = 0;
+
+        you = {};
+        you.name = "You";
+        you.countSucsses = 0;
+        you.countFault = 0;
+        you.startTime = new Date();
+        you.finishTime = you.startTime;
+
+        bob = {};
+        bob.name = "Paicer";
+        bob.countSucsses = 0;
+        bob.countFault = 0;
+        bob.startTime = you.startTime;
+        bob.finishTime = bob.startTime;
+
+        $("#myMSG").hide();
+        $("#sorryMSG").hide();
+        $("#scoreMsg").hide();
+        document.getElementById('sorryMSG').innerHTML = sorrymsg;
+        document.getElementById('scoreMsg').innerHTML = scoremsg;
+        document.getElementById('cpatchaTextBox').value = '';
+        createCaptcha();
+        
+        //myScoreFunction();
+
+
+        createPacerCaptcha();
+        jj('pacercaptcha');
+        clearRects();
+        var c = document.getElementById("rectsCanvas");
+        var ctx = c.getContext("2d");
+        for (rectindx = 0; rectindx < 6; rectindx++) {
+            ctx.beginPath();
+            ctx.lineWidth = "4";
+            ctx.strokeStyle = "darkGreen";
+            ctx.rect(50 + 35 * rectindx, 5, 30, 30);
+            ctx.stroke();
+        }
+
+        isMistake = animationFlag;
+        rectindx = 0;
+        $("#pacerErr").hide();
+        dim_err_user();
+
+
+        $("#pacer_score").hide();
+        $("#user_score").hide();
+        
+     
+
+    }
+
+    function hideMistake() {
+        $("#sorryMSG").hide();
+        $("#scoreMsg").hide();
+        if (turn_to_play == 0) {
+            var c = document.getElementById("rectsCanvas");
+            var ctx = c.getContext("2d");
+            for (rectindx = 0; rectindx < 6; rectindx++) {
+                ctx.beginPath();
+                ctx.lineWidth = "4";
+                ctx.strokeStyle = "darkGreen";
+                ctx.rect(50 + 35 * rectindx, 5, 30, 30);
+                ctx.stroke();
+            }
+        }
+        
+    }
+
+    function robotMistake() {
+        bob.countFault++;
+        bob.countSucsses -= mistakePunishment;
+        var today = new Date();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        counterTimeForCaptchaStrBob = counterTimeForCaptchaStrBob + "~F-" + time;
+        animationFlag = 1;
+        mistakeFlag = 0;
+        incorrectSound.play();
+        //document.getElementById("pacerboard").style.backgroundColor = "rgba(255, 0, 0, 0.8)";
+        //$("#sorryMSG").show();
+        
+        $("#scoreMsg").show();
+        setTimeout('msgMistakeRobot()', 7000);
+      
+        
+
+        var c = document.getElementById("rectsCanvas");
+        var ctx = c.getContext("2d");
+        for (rectindx = 0; rectindx < 6; rectindx++) {
+            ctx.beginPath();
+            ctx.lineWidth = "4";
+            ctx.strokeStyle = "red";
+            ctx.rect(50 + 35 * rectindx, 5, 30, 30);
+            ctx.stroke();
+        }
+
+        if (bob.countFault <= numOfSorrymsg) {
+
+            flagForTry = true;
+            functionAlert("Message from the virtual player: oops! I'm so sorry I was wrong", function yes() {
+
+
+            });
+
+
+
+        } else {
+            setTimeout('hideMistake()', 2000);
+        }
+    }
+
+    function robotCorrect() {
+        if (flagForTry) {
+            return;
+        }
+        bob.countSucsses++;
+        countSucssesForMinuteBob++;
+        bobRightCounterPerX++;
+        var today = new Date();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        counterTimeForCaptchaStrBob = counterTimeForCaptchaStrBob + "~S-" + time;
+        animationFlag = 0;
+        correctSound.play();
+        //document.getElementById("pacerboard").style.background = "rgba(255,255,255,0.6)"
+        //$("#sorryMSG").hide();
+        //$("#scoreMsg").hide();
+
+    }
+
+
+    function timeToMistake() {
+        //alert("time to mustake");
+        if (mistakeIndex <= mistakePoints.length - 1) {
+            
+            //var num = you.countSucsses + bob.countSucsse;
+            //alert(you.countSucsses.toString());
+            //alert(bob.countSucsses.toString());
+
+            if (you.countSucsses + bob.countSucsses == mistakePoints[mistakeIndex]) {
+                //alert("inside");
+
+                mistakeFlag = 1;
+                mistakeIndex++;
+            }
+        }
+    }
+
+    function mistake_alert() {
+        if (flagForTry) {
+            setTimeout('mistake_alert()', 100);
+
+
+        } else {
+            document.getElementById('score').innerHTML = you.countSucsses + bob.countSucsses;
+            document.getElementById('pacer_score').innerHTML = "virtual player score: " + bob.countSucsses.toString();
+            timeToMistake();
+            startRobot = new Date();
+            createCaptcha();
+            //turn_to_play = 0;
+            //$("#myBtn").show();
+        }
+
+    }
+    var dim = 0;
+    var dimFlag = 0;
+
+    function dim_err_user() {
+        if (turn_to_play == 0) {
+            if (dimFlag < 6) {
+                if (dim == 0) {
+                    $("#userErr").hide();
+
+                    dim = 1;
+                    setTimeout('dim_err_user()', 600);
+                } else {
+                    $("#userErr").show();
+                    dim = 0;
+
+                    setTimeout('dim_err_user()', 600);
+                }
+                dimFlag += 1;
+            } else {
+                dimFlag = 0;
+                $("#userErr").hide();
+            }
+        } else {
+            
+            $("#userErr").hide();
+        }
+        
+        
+    }
+    function dim_err_pacer() {
+        if (turn_to_play == 1) {
+            if (dimFlag < 6) {
+                if (dim == 0) {
+                    $("#pacerErr").hide();
+
+                    dim = 1;
+                    setTimeout('dim_err_pacer()', 600);
+                } else {
+                    $("#pacerErr").show();
+                    dim = 0;
+
+                    setTimeout('dim_err_pacer()', 600);
+                }
+                dimFlag += 1;
+            } else {
+                dimFlag = 0;
+                $("#pacerErr").hide();
+            }
+        } else {
+            
+            $("#pacerErr").hide();
+        }
+        
+    }
+
+
+
+
+    function jj(player) {
+        //clear the contents of captcha div first
+        document.getElementById(player).innerHTML = "";
+        var charsArray = "*";
+        var lengthOtp = 6;
+        var pacercaptcha = [' ',' ',' ',' ',' ',' '];
+
+        document.getElementById(player).innerHTML = "";
+        var pacercanv = document.createElement("canvas");
+        pacercanv.id = "pacercaptcha";
+        pacercanv.width = 300;
+        pacercanv.height = 90;
+        var pacerctx = pacercanv.getContext("2d");
+        pacerctx.font = "50px georgia";
+        pacerctx.textAlign = "center";
+        //pacerctx.fillStyle = "black";
+        //pacerctx.fillRect(0, 0, 300, 50);
+        pacerctx.strokeText(pacercaptcha.join(""), 150, 50);
+        //storing captcha so that can validate you can save it somewhere else according to your specific requirements
+        document.getElementById(player).appendChild(pacercanv); // adds the canvas to the body element. hi alon!
+    }
+
+
+
+
+
+    function msgMistakeRobot() {
+        $("#scoreMsg").show();
+    }
+    function msgMistakeRobot() {
+        $("#scoreMsg").hide();
+    }
+
+
+    function changeTurn() {
+
+        
+        if (flagForTry) {
+            return;
+        } if (flagSendData == 0) {
+
+            //alert("change_turn");
+            
+            
+            bob.finishTime = new Date();
+            var totalTime = (bob.finishTime - bob.startTime) / 1000;
+            if (totalTime / 60 >= MAX_TIME || bob.countSucsses >= MAX_ROUNDS) {
+                return;
+            }
+
+
+            //run logic of robot
+            else if (mistakeFlag == 1) {
+                robotMistake();
+                mistake_alert();
+                new_runRobot();
+
+                return;
+            }
+            else {
+                robotCorrect();
+            }
+            timeToMistake();
+            
+           
+            document.getElementById('score').innerHTML = you.countSucsses + bob.countSucsses;
+
+            document.getElementById('pacer_score').innerHTML = "virtual player score: " + bob.countSucsses.toString();
+            document.getElementById('user_score').innerHTML = "your score: " + you.countSucsses.toString();
+            
+            
+            //clearRects();
+            
+            document.getElementById('turnTitle').innerHTML = "<br><br>Your turn";
+            createCaptcha();
+            turn_to_play = 0;
+            document.getElementById("cpatchaTextBox").disabled = false;
+
+            //$("#pacercaptcha").hide();
+            jj('pacercaptcha');
+            
+            //$("#captcha").show();
+            $("#myMSG").hide();
+            $("#myBtn").show();
+            dimFlag = 0;
+            dim_err_user();
+            
+            
+        }
+    }
+
+    function new_runRobot() {
+        
+        if (flagSendData == 0 && turn_to_play == 1) {
+            //$("#pacercaptcha").show();
+            jj('captcha');
+            
+            createPacerCaptcha();
+            dimFlag = 0;
+            dim_err_pacer();
+            document.getElementById('turnTitle').innerHTML = "<br><br>Virtual player's turn";
+
+            //document.getElementById("pacerboard").style.background = "rgba(255,255,255,0.6)"
+            
+            $("#sorryMSG").hide();
+            //$("#scoreMsg").hide();
+            rectsAnimation();
+            startRobot = new Date();
+        }
+    }
+
+    function runRobot() {
+        if (flagForTry) {
+            return;
+        }
+        if (flagSendData == 0) {
+            alert("in runRobot");
+            bob.finishTime = new Date();
+            var totalTime = (bob.finishTime - bob.startTime) / 1000;
+            if (totalTime / 60 >= MAX_TIME || bob.countSucsses >= MAX_ROUNDS) {
+                //bob.finishTime=MAX_TIME;
+                //myScoreFunction();
+                //sendData(); I changed
+                return;
+            }
+
+
+            //run logic of robot
+            else if (mistakeFlag == 1) {
+                robotMistake();
+                mistake_alert();
+                return;
+            }
+            else {
+                robotCorrect();
+            }
+
+            //end logic
+            //myScoreFunction();
+            document.getElementById('score').innerHTML = you.countSucsses + bob.countSucsses;
+            timeToMistake();
+            //createPacerCaptcha();
+            clearRects();
+            rectsAnimation();
+
+            startRobot = new Date();
+            RobotTimeout = setTimeout('runRobot()', pacerPace);
+
+        }
+    }
+    $(document).ready(function () {
+
+        $("#myBtn").click(function () {
+            if (turn_to_play == 0) {
+                run();
+            }
+            
+        })
+        $(".myC").click(function () {
+            var theid = $(this).attr('id');
+            if (theid == myCheckBtn) {
+                $("#myCheckDiv").hide();
+                flagYouHere = 0;
+            }
+        })
+    })
+
+
+
+</script>
